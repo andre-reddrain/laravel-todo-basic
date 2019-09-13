@@ -13,7 +13,7 @@
                     @include('common.errors')   <!-- Incluí a Form de Erros -->
 
                     <!-- New Task Form -->
-                    <form action="{{ url('task')}}" method="POST" class="form-horizontal">
+                    <form action="{{ url('task/')}}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
 
                         <!-- Task Name -->
@@ -51,18 +51,22 @@
                                 <th>&nbsp;</th>
                             </thead>
                             <tbody>
+                                <!-- Para cada Task na base de dados, vai criar uma linha na tabela -->
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
 
                                         <!-- Task Delete Button -->
                                         <td>
+                                            <!-- Cada click do botão delete vai enviar o ID da task a que está atribuida.
+                                            O botão é colocado num Form POST, para poder fazer refresh da página. -->
                                             <form action="{{ url('task/'.$task->id) }}" method="POST">
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fa fa-btn fa-trash"></i>Delete
                                                 </button>
                                                 {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
+                                                {{ method_field('DELETE') }} 
+                                                <!-- Hidden Input - Indica ao Route que em vez de ser Post é DELETE -->
                                             </form>
                                         </td>
                                     </tr>

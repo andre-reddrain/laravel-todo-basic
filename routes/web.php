@@ -15,9 +15,12 @@ use App\Task;
 use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['web']], function () {
+
+    //region Route::get (Deprecated)
     /**
      * Show Task Dashboard
      */
+    /*
     Route::get('/', function () {
         //Vai devolver as tasks existentes na base de dados, com a criteria de organização
         //de Criação crescente (Os mais antigos em cima, os novos em baixo)
@@ -25,15 +28,32 @@ Route::group(['middleware' => ['web']], function () {
             'tasks' => Task::orderBy('created_at', 'asc')->get()
         ]);
     });
+    */
+    //endregion
+
     /**
+     * Show Task Dashboard
+     */
+    Route::get('/', 'Tasks\TaskController@getAllTasks');
+
+    /**
+     * Add New Task
+     * Vai enviar todos os inputs (post) para o Controller, onde lá a inserção da task é tratada
+     */
+    Route::post('/task', 'Tasks\TaskController@addTask');
+
+    //region Route::Post (Deprecated)
+    /** 
+     * OLD Method - Placed on TaskController
+     * 
+     * 
      * Add New Task
      * Request vai receber todos os parâmetros existentes na página, em forma de array.
      * Para visualizar um Request, descomentar a linha de baixo
      */
+    /*
     Route::post('/task', function (Request $request) {
-
         dd($request);   //Vai fazer o "Dump and Die" e vai mostrar no ecrã o Request
-
         //Validator vai fazer as validações pretendidas
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',   //Validação de Max Length & null
@@ -51,14 +71,28 @@ Route::group(['middleware' => ['web']], function () {
         $task->save();                  //Guarda a task na base de dados
         return redirect('/');           //Vai redirecionar para a página inicial
     });
+    */
+    //endregion
+
     /**
      * Delete Task
      * Vai receber a task a partir do botão de delete da página inicial.
      * Quando o botão é clicado, vai realizar este método.
      */
+    Route::delete('/task/{task}', 'Tasks\TaskController@deleteTask');
+
+    //region Route::delete (Deprecated)
+    /**
+     * Delete Task
+     * Vai receber a task a partir do botão de delete da página inicial.
+     * Quando o botão é clicado, vai realizar este método.
+     */
+    /*
     Route::delete('/task/{task}', function (Task $task) {
         //dd($task);              //Vai fazer o "Dump and Die" e vai mostrar no ecrã a Task
         $task->delete();        //Apaga a Task selecionada
         return redirect('/');   //Redireciona para a página inicial
     });
+    */
+    //endregion
 });
